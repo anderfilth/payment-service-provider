@@ -1,0 +1,29 @@
+version: '3'
+services:
+  api:
+    build: ./
+    container_name: payment-service-provider-api
+    volumes:
+      - ./:/home/node/api
+      - /home/node/api/node_modules
+    ports:
+      - '3333:3333'
+    depends_on:
+      - database-pg
+  database-pg:
+    image: postgres
+    container_name: postgre-database
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - '15432:5432'
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - pg-compose-network
+volumes:
+  pg-data:
+
+networks:
+  pg-compose-network:
+    driver: bridge
