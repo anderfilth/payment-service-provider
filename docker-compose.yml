@@ -10,20 +10,24 @@ services:
       - '3333:3333'
     depends_on:
       - database-pg
+    networks:
+      - compose-network
   database-pg:
     image: postgres
-    container_name: postgre-database
+    container_name: postgres-database
     environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_DATABASE}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
-      - '15432:5432'
+      - '5432:5432'
     volumes:
       - pg-data:/var/lib/postgresql/data
     networks:
-      - pg-compose-network
+      - compose-network
 volumes:
   pg-data:
 
 networks:
-  pg-compose-network:
+  compose-network:
     driver: bridge

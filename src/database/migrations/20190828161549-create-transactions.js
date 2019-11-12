@@ -30,7 +30,7 @@ module.exports = {
         values: ['debit_card', 'credit_card'],
         allowNull: false,
       },
-      card_number: {
+      card_last_number: {
         type: Sequelize.STRING(4),
         allowNull: false,
       },
@@ -58,13 +58,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.dropTable('users');
-    */
     return queryInterface.dropTable('transactions');
   },
 };
