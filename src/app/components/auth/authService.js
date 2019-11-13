@@ -9,13 +9,13 @@ const findUser = User => ({ email, id }) => {
   return User.findOne({
     where,
   });
-}
+};
 
 const storeNewUser = User => ({ name, email, password }) => {
   return User.create({ name, email, password });
-}
+};
 
 export default User => ({
   findUser: findUser(User),
   storeNewUser: storeNewUser(User),
-})
+});
