@@ -2,10 +2,12 @@ import logger from '../logger';
 
 export default (err, res) => {
   const { statusCode, message } = err;
-  logger.error(`API returned one or more errors while executing: statusHttp: ${statusCode} - message: ${message}`)
+  logger.error(
+    `API returned one or more errors while executing: statusCode: ${statusCode} - message: ${message}`
+  );
   res.status(statusCode).json({
-    status: "error",
+    status: 'error',
     statusCode,
-    message
+    message,
   });
 };

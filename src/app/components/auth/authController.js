@@ -1,26 +1,47 @@
+import jwt from 'jsonwebtoken';
+import * as Yup from 'yup';
+
+import config from '../../../config/auth';
+
 import User from '../user/userModel';
 
-import authImport from './authService';
+import userServiceImport from '../user/userService';
+import ErrorHandler from '../../../helpers/error/ErrorHandler';
 
-const authService = authImport(User);
+const userService = userServiceImport(User);
 
-exports.signup = async (req, res, next) => {
+exports.store = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const schema = Yup.object().shape({
+      email: Yup.string()
+        .email()
+        .required(),
+      password: Yup.string().required(),
+    });
 
-    const userExist = await authService.findUser({ email });
-    if (userExist) {
-      res.status(409).send({ message: 'usuario ja cadastrado' });
+    if (!(await schema.isValid(req.body))) {
+      throw new ErrorHandler(400, 'Validation fails');
     }
 
-    const newUser = await authService.storeNewUser({ name, email, password });
-
-    if (newUser.message && newUser.status) {
-      return res.status(newUser.status).json(newUser.message);
+    const { email, password } = req.body;
+    const user = await userService.findUser(email);
+    if (!user) {
+      throw new ErrorHandler(400, 'User not exist');
     }
-
-    return res.status(201).send({ message: 'Usuario criado com sucesso!' });
+    if (!(await user.checkPassword(password))) {
+      throw new ErrorHandler(400, 'Password does not match');
+    }
+    const { id, name } = user;
+    const response = {
+      id,
+      name,
+      email,
+      token: jwt.sign({ id }, config.secret, {
+        expiresIn: config.expiresIn,
+      }),
+    };
+    res.status(200).json(response);
   } catch ({ message }) {
-    return res.status(500).json(message);
+    res.status(500).json(message);
   }
 };

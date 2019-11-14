@@ -1,15 +1,17 @@
 import { Router } from 'express';
+import swaggerUi from 'swagger-ui-express';
+
+import userController from './app/components/user/userController';
+import authController from './app/components/auth/authController';
+import swaggerDocument from './docs/swagger.json';
 
 const routes = new Router();
 
-import authController from './app/components/auth/authController';
+routes.use('/docs', swaggerUi.serve);
+routes.get('/docs', swaggerUi.setup(swaggerDocument));
 
-routes.get('/', (req, res) => res.json({ message: 'ok' }));
+routes.route('/login').post(authController.store);
 
-router.route('/login')
-  .post(authController.login)
-
-router.route('/signup')
-  .post(authController.signup)
+routes.route('/api/v1/user').post(userController.store);
 
 export default routes;

@@ -1,9 +1,9 @@
 class ErrorHandler extends Error {
   constructor(statusCode, message) {
-    super()
+    super();
     this.statusCode = statusCode;
     this.message = message;
   }
 }
 
-export default ErrorHandler
+export default ErrorHandler;
