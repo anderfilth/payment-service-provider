@@ -31,8 +31,8 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "parameters": {
-    "appToken": {
-      "name": "appToken",
+    "authorization": {
+      "name": "authorization",
       "in": "header",
       "description": "Application Token",
       "required": true,
@@ -88,6 +88,14 @@
                 "id": {
                   "type": "integer",
                   "description": "user id"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "email"
                 }
               }
             }
@@ -138,7 +146,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [
@@ -254,18 +262,23 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer",
-                  "description": "user id"
-                },
-                "name": {
-                  "type": "string",
-                  "description": "user name"
-                },
-                "email": {
-                  "type": "string",
-                  "format": "email",
-                  "description": "user email"
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "user id"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "user name"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "user email"
+                    }
+                  }
                 },
                 "token": {
                   "type": "string",
@@ -323,7 +336,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [
@@ -443,7 +456,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [
@@ -534,7 +547,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [],
@@ -612,7 +625,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [
@@ -697,9 +710,9 @@
     }
   },
   "securityDefinitions": {
-    "appToken": {
+    "authorization": {
       "type": "apiKey",
-      "name": "appToken",
+      "name": "authorization",
       "in": "header"
     }
   },
