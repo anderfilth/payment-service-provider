@@ -40,10 +40,6 @@ module.exports = {
         type: Sequelize.BIGINT,
         allowNull: false,
       },
-      fee: {
-        type: Sequelize.BIGINT,
-        allowNull: false,
-      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

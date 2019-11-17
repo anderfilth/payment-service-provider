@@ -1,44 +1,42 @@
 import * as Yup from 'yup';
 import User from './userModel';
-import userServiceImport from './userService';
-import ErrorHandler from '../../../helpers/error/ErrorHandler';
+import userRepositoryImport from './userRepository';
 
-const userService = userServiceImport(User);
+const userRepository = userRepositoryImport(User);
 
 exports.store = async (req, res, next) => {
-  try {
-    const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
-      password: Yup.string()
-        .required()
-        .min(6),
+  const schema = Yup.object().shape({
+    name: Yup.string().required(),
+    email: Yup.string()
+      .email()
+      .required(),
+    password: Yup.string()
+      .required()
+      .min(6),
+  });
+
+  schema.validate(req.body).catch(err => {
+    const { errors } = err;
+    return res.status(400).json({
+      error: 'Validation fails',
+      details: errors,
     });
+  });
 
-    if (!(await schema.isValid(req.body))) {
-      throw new ErrorHandler(400, 'Validation fails');
-    }
+  const { name, email, password } = req.body;
 
-    const { name, email, password } = req.body;
-
-    const userExist = await userService.findUser({ email });
-    if (userExist) {
-      throw new ErrorHandler(
-        400,
-        'User with the specified email already exists'
-      );
-    }
-
-    const newUser = await userService.storeNewUser({ name, email, password });
-
-    const { id } = newUser;
-
-    return res.status(201).json({
-      id,
-    });
-  } catch ({ message }) {
-    throw new ErrorHandler(500, message);
+  const userExist = await userRepository.findUser({ email });
+  if (userExist) {
+    return res.status(400).json({ error: 'User already exists.' });
   }
+
+  const newUser = await userRepository.storeNewUser({ name, email, password });
+
+  const { id } = newUser;
+
+  return res.status(201).json({
+    id,
+    name,
+    email,
+  });
 };

@@ -25,6 +25,10 @@ module.exports = {
         type: Sequelize.BIGINT,
         allowNull: false,
       },
+      fee: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+      },
       payment_method: {
         type: Sequelize.ENUM,
         values: ['debit_card', 'credit_card'],

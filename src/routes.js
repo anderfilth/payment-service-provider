@@ -12,6 +12,6 @@ routes.get('/docs', swaggerUi.setup(swaggerDocument));
 
 routes.route('/login').post(authController.store);
 
-routes.route('/api/v1/user').post(userController.store);
+routes.route('/api/v1/users').post(userController.store);
 
 export default routes;
