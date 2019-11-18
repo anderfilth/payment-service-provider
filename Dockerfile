@@ -12,6 +12,8 @@ RUN yarn
 
 COPY --chown=node:node . .
 
+RUN yarn sequelize db:migrate
+
 EXPOSE 3333
 
 CMD ["yarn", "start"]
