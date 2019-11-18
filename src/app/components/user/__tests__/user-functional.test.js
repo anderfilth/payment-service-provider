@@ -72,8 +72,6 @@ describe('User', () => {
       .set('authorization', session.body.token)
       .send({
         name: 'John Johnson 1',
-        oldPassword: '123456',
-        password: '654321',
       });
 
     expect(response.status).toBe(204);

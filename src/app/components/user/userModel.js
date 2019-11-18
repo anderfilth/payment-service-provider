@@ -24,10 +24,10 @@ class User extends Model {
     return this;
   }
 
-  // static associate(models) {
-  //   this.hasMany(models.Transaction);
-  //   this.hasMany(models.Payable);
-  // }
+  static associate(models) {
+    this.hasMany(models.Transaction);
+    this.hasMany(models.Payable);
+  }
 
   checkPassword(password) {
     return bcrypt.compare(password, this.password_hash);

@@ -765,6 +765,11 @@
           "description": "Payment Method",
           "example": "credit_card"
         },
+        "status": {
+          "type": "string",
+          "description": "Transaction Status",
+          "example": "authorized"
+        },
         "card_last_number": {
           "type": "string",
           "description": "Card Lasts Numbers",
