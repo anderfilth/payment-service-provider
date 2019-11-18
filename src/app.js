@@ -3,6 +3,7 @@ import 'express-async-errors';
 import Youch from 'youch';
 
 import routes from './routes';
+import logger from './helpers/logger';
 
 import './database';
 
@@ -27,6 +28,7 @@ class App {
     this.server.use(async (err, req, res, next) => {
       if (process.env.NODE_ENV === 'development') {
         const errors = await new Youch(err, req).toJSON();
+        logger.debug(`Internal Server Error - ${JSON.stringify(errors)}`);
         return res.status(500).json(errors);
       }
       return res.status(500).json({

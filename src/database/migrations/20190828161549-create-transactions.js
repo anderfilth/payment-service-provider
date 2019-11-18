@@ -34,6 +34,11 @@ module.exports = {
         values: ['debit_card', 'credit_card'],
         allowNull: false,
       },
+      status: {
+        type: Sequelize.ENUM,
+        values: ['processing', 'authorized', 'refused '],
+        allowNull: false,
+      },
       card_last_number: {
         type: Sequelize.STRING(4),
         allowNull: false,

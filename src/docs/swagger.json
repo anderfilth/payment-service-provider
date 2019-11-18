@@ -21,18 +21,14 @@
     {
       "name": "Balance",
       "description": "Operations related to Balance API"
-    },
-    {
-      "name": "Payable",
-      "description": "Operations related to Payable API"
     }
   ],
   "schemes": ["http", "https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "parameters": {
-    "appToken": {
-      "name": "appToken",
+    "authorization": {
+      "name": "authorization",
       "in": "header",
       "description": "Application Token",
       "required": true,
@@ -88,6 +84,14 @@
                 "id": {
                   "type": "integer",
                   "description": "user id"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "email"
                 }
               }
             }
@@ -138,7 +142,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [
@@ -254,18 +258,23 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "type": "integer",
-                  "description": "user id"
-                },
-                "name": {
-                  "type": "string",
-                  "description": "user name"
-                },
-                "email": {
-                  "type": "string",
-                  "format": "email",
-                  "description": "user email"
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "user id"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "user name"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "user email"
+                    }
+                  }
                 },
                 "token": {
                   "type": "string",
@@ -323,7 +332,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [
@@ -443,7 +452,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [
@@ -534,7 +543,7 @@
         "produces": ["application/json"],
         "security": [
           {
-            "appToken": []
+            "authorization": []
           }
         ],
         "parameters": [],
@@ -602,104 +611,14 @@
         }
       }
     },
-    "/v1/payable/{transaction_id}": {
-      "x-swagger-router-controller": "payableController",
-      "get": {
-        "tags": ["Payable"],
-        "summary": "Need authentication",
-        "description": "Payable.",
-        "operationId": "getPayable",
-        "produces": ["application/json"],
-        "security": [
-          {
-            "appToken": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "transaction_id",
-            "in": "path",
-            "description": "Transaction's identifier",
-            "type": "integer",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "payment_status": {
-                  "type": "string",
-                  "example": "credit_card",
-                  "description": "Payment Status"
-                },
-                "payment_date": {
-                  "type": "string",
-                  "format": "date",
-                  "description": "Payment Date"
-                },
-                "amount": {
-                  "type": "integer",
-                  "example": 10000,
-                  "description": "Amount"
-                },
-                "fee": {
-                  "type": "string",
-                  "example": 100,
-                  "description": "Fee"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "422": {
-            "description": "Unprocessable Entity",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
     "/swagger": {
       "x-swagger-pipe": "swagger_raw"
     }
   },
   "securityDefinitions": {
-    "appToken": {
+    "authorization": {
       "type": "apiKey",
-      "name": "appToken",
+      "name": "authorization",
       "in": "header"
     }
   },
@@ -751,6 +670,11 @@
           "type": "string",
           "description": "Payment Method",
           "example": "credit_card"
+        },
+        "status": {
+          "type": "string",
+          "description": "Transaction Status",
+          "example": "authorized"
         },
         "card_last_number": {
           "type": "string",

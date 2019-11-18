@@ -64,4 +64,4 @@ typings/
 .vscode/
 
 # db sqlite
-.sqlite
+*.sqlite
