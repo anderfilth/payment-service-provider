@@ -21,10 +21,6 @@
     {
       "name": "Balance",
       "description": "Operations related to Balance API"
-    },
-    {
-      "name": "Payable",
-      "description": "Operations related to Payable API"
     }
   ],
   "schemes": ["http", "https"],
@@ -572,96 +568,6 @@
                       "type": "integer"
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "422": {
-            "description": "Unprocessable Entity",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/v1/payable/{transaction_id}": {
-      "x-swagger-router-controller": "payableController",
-      "get": {
-        "tags": ["Payable"],
-        "summary": "Need authentication",
-        "description": "Payable.",
-        "operationId": "getPayable",
-        "produces": ["application/json"],
-        "security": [
-          {
-            "authorization": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "transaction_id",
-            "in": "path",
-            "description": "Transaction's identifier",
-            "type": "integer",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "payment_status": {
-                  "type": "string",
-                  "example": "credit_card",
-                  "description": "Payment Status"
-                },
-                "payment_date": {
-                  "type": "string",
-                  "format": "date",
-                  "description": "Payment Date"
-                },
-                "amount": {
-                  "type": "integer",
-                  "example": 10000,
-                  "description": "Amount"
-                },
-                "fee": {
-                  "type": "string",
-                  "example": 100,
-                  "description": "Fee"
                 }
               }
             }

@@ -1,7 +1,10 @@
 import { Op } from 'sequelize';
+import db from '../../../database';
 
-const store = Transaction => data => {
-  return Transaction.create(data);
+const conn = db.getConnection();
+
+const store = Transaction => ({ data, dbTransaction }) => {
+  return Transaction.create(data, dbTransaction);
 };
 
 const index = Transaction => ({ id, user_id, limit, offset }) => {
@@ -21,7 +24,17 @@ const index = Transaction => ({ id, user_id, limit, offset }) => {
   });
 };
 
+const getDbTransaction = async () => {
+  return conn.transaction();
+};
+
+const commitDbTransaction = async ({ dbTransaction }) => {
+  await dbTransaction.commit();
+};
+
 export default Transaction => ({
   store: store(Transaction),
   index: index(Transaction),
+  getDbTransaction,
+  commitDbTransaction,
 });

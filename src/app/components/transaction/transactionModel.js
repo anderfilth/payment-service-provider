@@ -28,7 +28,7 @@ class Transaction extends Model {
       );
       transaction.fee =
         transaction.amount * transactionFee[transaction.payment_method];
-      transaction.status = 'processing';
+      transaction.status = 'authorized';
     });
 
     return this;
