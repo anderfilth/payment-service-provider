@@ -32,9 +32,14 @@ const commitDbTransaction = async ({ dbTransaction }) => {
   await dbTransaction.commit();
 };
 
+const rollbackDbTransaction = async ({ dbTransaction }) => {
+  await dbTransaction.rollback();
+};
+
 export default Transaction => ({
   store: store(Transaction),
   index: index(Transaction),
   getDbTransaction,
   commitDbTransaction,
+  rollbackDbTransaction,
 });
