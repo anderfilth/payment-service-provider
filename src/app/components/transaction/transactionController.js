@@ -20,38 +20,43 @@ exports.store = async (req, res) => {
 
   const dbTransaction = await transactionRepository.getDbTransaction();
 
-  const newTransaction = await transactionRepository.store({
-    data: {
-      ...req.body,
+  try {
+    const newTransaction = await transactionRepository.store({
+      data: {
+        ...req.body,
+        user_id: req.userId,
+      },
+      dbTransaction,
+    });
+
+    const payableData = {
       user_id: req.userId,
-    },
-    dbTransaction,
-  });
+      transaction_id: newTransaction.id,
+    };
 
-  const payableData = {
-    user_id: req.userId,
-    transaction_id: newTransaction.id,
-  };
+    const fee =
+      newTransaction.amount * transactionFee[newTransaction.payment_method];
 
-  const fee =
-    newTransaction.amount * transactionFee[newTransaction.payment_method];
+    await payableRepository.store({
+      data: {
+        ...payableData,
+        payment_status: payableStatus[newTransaction.payment_method],
+        amount: newTransaction.amount - fee,
+        payment_date: payableDate[newTransaction.payment_method],
+      },
+      dbTransaction,
+    });
 
-  await payableRepository.store({
-    data: {
-      ...payableData,
-      payment_status: payableStatus[newTransaction.payment_method],
-      amount: newTransaction.amount - fee,
-      payment_date: payableDate[newTransaction.payment_method],
-    },
-    dbTransaction,
-  });
+    // commit transaction
+    await transactionRepository.commitDbTransaction({ dbTransaction });
 
-  // commit transaction
-  await transactionRepository.commitDbTransaction({ dbTransaction });
-
-  return res
-    .status(201)
-    .json(transactionTransform.transactionOne(newTransaction));
+    return res
+      .status(201)
+      .json(transactionTransform.transactionOne(newTransaction));
+  } catch (err) {
+    await transactionRepository.rollbackDbTransaction({ dbTransaction });
+    return res.status(500).json(err.message);
+  }
 };
 
 exports.index = async (req, res) => {
