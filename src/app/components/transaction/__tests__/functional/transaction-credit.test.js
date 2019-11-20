@@ -42,7 +42,7 @@ describe('Transaction with credit card', () => {
     expect(response.body).toHaveProperty('amount', 10000);
     expect(response.body).toHaveProperty('fee', 500);
     expect(response.body).toHaveProperty('payment_method', 'credit_card');
-    expect(response.body).toHaveProperty('status', 'processing');
+    expect(response.body).toHaveProperty('status', 'authorized');
     expect(response.body).toHaveProperty('card_last_number', '1111');
     expect(response.body).toHaveProperty('card_name', 'John Johnson');
     expect(response.body).toHaveProperty('card_expiration_date', '1022');
